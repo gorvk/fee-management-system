@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sanjo Public School, Sulezari - Student Database</title>
+    <link
+      rel="stylesheet"
+      href="./styles/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="./styles/index.css" />
+  </head>
+  <body>
+    <div class="school-header-index">
+      <h1>Sanjo Public School, Sulezari - Student Database</h1>
+    </div>  
+    <div class="container d-flex justify-content-center">
+      <label for="btnGetFile">Upload Excel File *</label>
+      <button
+        onclick="window.api.getFilePath()"
+        id="btnGetFile"
+        type="button"
+        class="btn btn-outline-success"
+      >
+        Select File
+      </button>
+    </div>
+  </body>
+</html>

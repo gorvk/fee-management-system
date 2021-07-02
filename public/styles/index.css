@@ -1,0 +1,35 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.school-header-index {
+  padding: 2vh;
+  background-color: green;
+  text-align: center;
+}
+
+.school-header-index {
+  padding: 2vh;
+  background-color: green;
+  text-align: center;
+}
+
+.school-header-index h1 {
+  color: white;
+}
+
+#btnGetFile {
+  align-self: center; 
+}
+
+.btn{
+  margin-inline: 4%;
+  width: 10%;
+}
+.container{
+  border: 2px solid rgb(196, 196, 196);
+  background-color: rgb(243, 255, 243);
+  padding-block: 10%;
+  transform: translateY(50%);
+}

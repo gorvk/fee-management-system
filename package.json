@@ -1,0 +1,17 @@
+{
+  "name": "fee-management-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "watch": "nodemon --exec electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.0.2",
+    "electron": "^13.1.4",
+    "exceljs": "^4.2.1"
+  }
+}

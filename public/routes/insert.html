@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sanjo Public School, Sulezari - Student Database</title>
+    <link
+      rel="stylesheet"
+      href="../styles/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="../styles/home.css" />
+  </head>
+  <body>
+    <div class="sidenav">
+      <div class="selectedFile">
+        <p id="fileName">No File Selected</p>
+        <button
+          onclick="window.location.href ='../index.html'"
+          id="btnGetFile"
+          type="button"
+          class="btn btn-outline-success"
+        >
+          Change File
+        </button>
+      </div>
+      <a class="insert" href="insert.html">Insert</a>
+      <a class="update" href="update.html">Update</a>
+      <a class="delete" href="delete.html">Delete</a>
+    </div>
+    <div class="school-header">
+      <h1>Sanjo Public School, Sulezari - Student Database</h1>
+    </div>
+    <div class="top-container">
+      <div class="text-center mt-5">
+        <h1>Insert Fee Details</h1>
+      </div>
+      <div class="gray-card col-lg-7 mx-auto">
+        <div class="card mt-2 mx-auto p-4">
+          <div class="card-body">
+            <div class="container">
+              <form id="contact-form" role="form">
+                <div class="controls">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="form_name">Firstname *</label>
+                        <input
+                          id="form_name"
+                          type="text"
+                          name="name"
+                          class="form-control"
+                          placeholder="Enter Student's Firstname"
+                          required="required"
+                          data-error="student name is required."
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="form_lastname">Middlename *</label>
+                        <input
+                          id="form_lastname"
+                          type="text"
+                          name="surname"
+                          class="form-control"
+                          placeholder="Enter Student's Middlename"
+                          required="required"
+                          data-error="Lastname is required."
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="form_lastname">Lastname *</label>
+                        <input
+                          id="form_lastname"
+                          type="text"
+                          name="surname"
+                          class="form-control"
+                          placeholder="Enter Student's Lastname"
+                          required="required"
+                          data-error="Lastname is required."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="form_email">Mobile Number *</label>
+                        <input
+                          id="form_email"
+                          type="tel"
+                          pattern="[0-9]{10}"
+                          title="Please Enter valid 10 digit mobile number"
+                          name="mobileNumber"
+                          class="form-control"
+                          placeholder="Enter Mobile Number *"
+                          required="required"
+                          data-error="Mobile Number is required."
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="form_need"
+                          >Select Student's Standard *</label
+                        >
+                        <select
+                          id="form_need"
+                          name="need"
+                          class="form-select"
+                          required="required"
+                          data-error="Please specify Standard."
+                        >
+                          <option value="" selected disabled>Class</option>
+                          <option>Nursery</option>
+                          <option>KG 1</option>
+                          <option>KG 2</option>
+                          <option>1st</option>
+                          <option>2nd</option>
+                          <option>3rd</option>
+                          <option>4th</option>
+                          <option>5th</option>
+                          <option>6th</option>
+                          <option>7th</option>
+                          <option>8th</option>
+                          <option>9th</option>
+                          <option>10th</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="form_need">Select Installment *</label>
+                        <select
+                          id="form_need"
+                          name="need"
+                          class="form-select"
+                          required="required"
+                          data-error="Please specify Installment."
+                        >
+                          <option value="" selected disabled>
+                            Installment
+                          </option>
+                          <option>1st Installment</option>
+                          <option>2nd Installment</option>
+                          <option>3rd Installment</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="form_email">Paid Amount *</label>
+                        <input
+                          id="form_email"
+                          type="number"
+                          pattern="[0-9]{10}"
+                          name="mobileNumber"
+                          class="form-control"
+                          placeholder="Enter Paid Amount *"
+                          required="required"
+                          data-error="Paid Amount is required."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="form_email">Bill No. *</label>
+                        <input
+                          id="form_email"
+                          type="text"
+                          name="mobileNumber"
+                          class="form-control"
+                          placeholder="Enter Bill Number *"
+                          required="required"
+                          data-error="Bill Number is required."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <input
+                      type="submit"
+                      class="btn btn-success btn-send btn-block"
+                      value="Submit"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../script.js"></script>
+  </body>
+</html>
