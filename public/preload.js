@@ -1,6 +1,8 @@
 const { contextBridge } = require("electron");
 const { ipcRenderer } = require("electron");
 
+var studentData;
+
 contextBridge.exposeInMainWorld("api", {
   getFilePath: () => {
     ipcRenderer.send("getFilePath");
@@ -21,39 +23,44 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.send("insert", fdata);
   },
 
-  update: () => {
-    var fdata = {
+  getData: () => {
+    var filePath = sessionStorage.getItem("filePath");
+    var formData = {
       firstName: document.getElementById("firstName").value,
       middleName: document.getElementById("middleName").value,
       lastName: document.getElementById("lastName").value,
       installment: document.getElementById("installment").value,
-      filePath: sessionStorage.getItem("filePath"),
+      filePath: filePath,
     };
 
-    ipcRenderer.send("update", fdata);
+    ipcRenderer.send("getData", formData);
     ipcRenderer.on("studentData", (_, data) => {
-      document.getElementById("mobileNumber").value = data.mobileNumber;
-      document.getElementById("class").value = data.class;
-      document.getElementById("paidAmount").value = data.paidAmount;
-      document.getElementById("billNo").value = data.billNumber;
+      if (data) {
+        studentData = data;
+        studentData["filePath"] = filePath
+        document.getElementById("mobileNumber").value = data.mobileNumber;
+        document.getElementById("class").value = data.class;
+        document.getElementById("paidAmount").value = data.paidAmount;
+        document.getElementById("billNo").value = data.billNumber;
+      } else {
+        // SHOW DIALOG as -> Data Not Found
+        console.log("SHOW DIALOG as -> Data Not Found");
+      }
     });
   },
 
-  delete: () => {
-    var fdata = {
-      firstName: document.getElementById("firstName").value,
-      middleName: document.getElementById("middleName").value,
-      lastName: document.getElementById("lastName").value,
-      installment: document.getElementById("installment").value,
-      filePath: sessionStorage.getItem("filePath"),
-    };
+  update: () => {
+    var filePath = sessionStorage.getItem("filePath");
+    var form = document.getElementById("updateForm");
+    var formData = new FormData(form);
+    formData.append("filePath", filePath);
+    formData.append("rowNumber", studentData.rowNumber);
+    var fdata = {};
+    formData.forEach((value, key) => (fdata[key] = value));
+    ipcRenderer.send("update", fdata);
+  },
 
-    ipcRenderer.send("delete", fdata);
-    ipcRenderer.on("studentData", (_, data) => {
-      document.getElementById("mobileNumber").value = data.mobileNumber;
-      document.getElementById("class").value = data.class;
-      document.getElementById("paidAmount").value = data.paidAmount;
-      document.getElementById("billNo").value = data.billNumber;
-    });
+  delete: () => {
+    ipcRenderer.send("delete", studentData);
   },
 });
