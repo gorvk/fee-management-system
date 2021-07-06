@@ -58,18 +58,20 @@ ipcMain.on("getData", (event, data) => {
   workbook.xlsx.readFile(data.filePath).then(() => {
     var worksheet = workbook.getWorksheet("Fee");
     worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
-      console.log(row.values);
+      // console.log(row.values);
       if (
         row.values.includes(data.firstName) &&
         row.values.includes(data.lastName) &&
         row.values.includes(data.middleName) &&
         row.values.includes(data.installment)
       ) {
+        console.log("date main ="+row.values[9]);
         found = {
           mobileNumber: row.values[4],
           class: row.values[5],
           paidAmount: row.values[7],
           billNo: row.values[8],
+          date: row.values[9],
           rowNumber: rowNumber,
         };
       }
@@ -94,6 +96,7 @@ ipcMain.on("update", (event, data) => {
     installment: 6,
     paidAmount: 7,
     billNo: 8,
+    date: 9,
   };
   workbook.xlsx.readFile(data.filePath).then(() => {
     var worksheet = workbook.getWorksheet("Fee");
@@ -106,6 +109,7 @@ ipcMain.on("update", (event, data) => {
     row.getCell(columns.installment).value = data.installment;
     row.getCell(columns.paidAmount).value = data.paidAmount;
     row.getCell(columns.billNo).value = data.billNo;
+    row.getCell(columns.date).value = data.date;
 
     row.commit();
     workbook.xlsx.writeFile(data.filePath);
@@ -125,6 +129,7 @@ ipcMain.on("delete", (event, data) => {
       installment: 6,
       paidAmount: 7,
       billNo: 8,
+      date: 9,
     };
     var worksheet = workbook.getWorksheet("Fee");
     var row = worksheet.getRow(data.rowNumber);
@@ -136,6 +141,7 @@ ipcMain.on("delete", (event, data) => {
     row.getCell(columns.installment).value = "";
     row.getCell(columns.paidAmount).value = "";
     row.getCell(columns.billNo).value = "";
+    row.getCell(columns.date).value = "";
     row.commit();
 
     if (data.rowNumber == worksheet.rowCount) {
@@ -161,6 +167,7 @@ ipcMain.on("insert", (event, data) => {
       { header: "Installment", key: "installment", width: 10 },
       { header: "Paid Amount", key: "paidAmount", width: 10 },
       { header: "Bill Number", key: "billNo", width: 10 },
+      { header: "Date", key: "date", width: 10 },
     ];
 
     worksheet.addRow({
@@ -172,6 +179,7 @@ ipcMain.on("insert", (event, data) => {
       installment: data.installment,
       paidAmount: data.paidAmount,
       billNo: data.billNo,
+      date: data.date,
     });
 
     workbook.xlsx.writeFile(data.filePath);

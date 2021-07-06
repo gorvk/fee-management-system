@@ -29,11 +29,11 @@
       <h1>Sanjo Public School, Sulezari - Student Database</h1>
     </div>
     <div class="top-container">
-      <div class="text-center mt-5">
+      <div class="text-center mt-4">
         <h1>Update Fee Details</h1>
       </div>
       <div class="gray-card col-lg-7 mx-auto">
-        <div class="card mt-2 mx-auto p-4">
+        <div class="card mt-4 mx-auto p-4">
           <div class="card-body">
             <div class="container">
               <form id="updateForm" role="form" onsubmit="window.api.update()">
@@ -100,13 +100,13 @@
                     </div>
                   </div>
                   <div class="col-md-2 mb-4 mt-3">
-                    <button
+                    <input
                       id="getData"
                       onclick="window.api.getData()"
                       class="btn btn-success btn-send btn-block"
-                    >
-                      Get Data
-                    </button>
+                      type="button"
+                      value="Get Data"
+                    />
                   </div>
                   <div class="row">
                     <div class="col-md-6">
@@ -184,11 +184,27 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="date">Date *</label>
+                      <input
+                        id="date"
+                        name="date"
+                        type="date"
+                        class="form-control"
+                        placeholder="Enter Bill Number"
+                        required="required"
+                        data-error="Bill Number is required."
+                      />
+                    </div>
+                  </div>
                   <div class="col-md-12">
                     <input
+                      id="submitButton"
                       type="submit"
-                      class="btn btn-success btn-send pt-2 btn-block"
+                      class="btn btn-success btn-send btn-block"
                       value="Update Record"
+                      disabled
                     />
                   </div>
                 </div>

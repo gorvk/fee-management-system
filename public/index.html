@@ -11,17 +11,48 @@
   <body>
     <div class="school-header-index">
       <h1>Sanjo Public School, Sulezari - Student Database</h1>
-    </div>  
-    <div class="container d-flex justify-content-center">
-      <label for="btnGetFile">Upload Excel File *</label>
-      <button
-        onclick="window.api.getFilePath()"
-        id="btnGetFile"
-        type="button"
-        class="btn btn-outline-success"
-      >
-        Select File
-      </button>
+    </div>
+    <div class="container">
+      <div class="row justify-content-md-center pb-5">
+        <h5 class="col-md-auto">Read before using software.</h5>
+      </div>
+      <div class="row justify-content-md-center pb-5">
+        <div class="col-md-auto">
+          <ul>
+            <li>
+              Click on below <b>Select File</b> button to select the excel file.
+            </li>
+            <li>
+              When a new file is selected software creates a new worksheet as
+              <b>Fee</b>, where all the data is saved.
+            </li>
+            <li>
+              Do not change the content of excel file or worksheet manually,
+              perform all the actions from software else
+              <b>excel file might get corrupt</b>.
+            </li>
+            <li>
+              All the data is saved and retrived from selected excel file.
+            </li>
+            <li>All <b>*</b> fields are denoted as required feilds.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="row justify-content-md-center pb">
+        <div class="col-md-auto">
+          <label for="btnGetFile">Upload Excel File *</label>
+        </div>
+        <div class="col-md-auto">
+          <button
+            onclick="window.api.getFilePath()"
+            id="btnGetFile"
+            type="button"
+            class="btn btn-outline-success"
+          >
+            Select File
+          </button>
+        </div>
+      </div>
     </div>
   </body>
 </html>

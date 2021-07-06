@@ -9,27 +9,19 @@ body {
   text-align: center;
 }
 
-.school-header-index {
-  padding: 2vh;
-  background-color: green;
-  text-align: center;
-}
-
 .school-header-index h1 {
   color: white;
 }
 
 #btnGetFile {
-  align-self: center; 
+  align-self: center;
 }
 
-.btn{
-  margin-inline: 4%;
-  width: 10%;
-}
-.container{
-  border: 2px solid rgb(196, 196, 196);
+.container {
+  border-radius: 10px;
+  border: 2px solid rgb(154, 216, 154);
   background-color: rgb(243, 255, 243);
   padding-block: 10%;
-  transform: translateY(50%);
+  transform: translateY(10%);
+  float: inherit;
 }

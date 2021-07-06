@@ -36,12 +36,17 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.send("getData", formData);
     ipcRenderer.on("studentData", (_, data) => {
       if (data) {
+        console.log("Data = " + data.date);
         studentData = data;
         studentData["filePath"] = filePath;
         document.getElementById("mobileNumber").value = data.mobileNumber;
         document.getElementById("class").value = data.class;
         document.getElementById("paidAmount").value = data.paidAmount;
         document.getElementById("billNo").value = data.billNo;
+        document.getElementById("date").value = data.date;
+
+        console.log("preload date = " + data.date);
+        document.getElementById("submitButton").disabled = false;
       } else {
         console.log("SHOW DIALOG as -> Data Not Found");
       }
