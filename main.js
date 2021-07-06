@@ -10,13 +10,22 @@ function initializeWorkbook(filePath) {
   var workbook = new XLSX.Workbook();
   workbook.xlsx.readFile(filePath).then(() => {
     if (workbook.getWorksheet("Fee") == undefined) {
-      console.log("Worksheet Intialized !!");
       workbook.addWorksheet("Fee");
       workbook.xlsx.writeFile(filePath);
+      showDialog("Success", "Worksheet Created");
+      console.log("Worksheet Intialized !!");
     } else {
       console.log("WORKSHEET Exists !!");
     }
   });
+}
+
+function showDialog(title, message) {
+  var options = {
+    message: message,
+    title: title,
+  };
+  dialog.showMessageBox(null, options);
 }
 
 ipcMain.on("getFilePath", (event, data) => {
@@ -49,6 +58,7 @@ ipcMain.on("getData", (event, data) => {
   workbook.xlsx.readFile(data.filePath).then(() => {
     var worksheet = workbook.getWorksheet("Fee");
     worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
+      console.log(row.values);
       if (
         row.values.includes(data.firstName) &&
         row.values.includes(data.lastName) &&
@@ -59,11 +69,16 @@ ipcMain.on("getData", (event, data) => {
           mobileNumber: row.values[4],
           class: row.values[5],
           paidAmount: row.values[7],
-          billNumber: row.values[8],
+          billNo: row.values[8],
           rowNumber: rowNumber,
         };
       }
     });
+
+    if (found == false) {
+      showDialog("Failed", "Data not Found");
+    }
+
     event.reply("studentData", found);
   });
 });
@@ -78,22 +93,23 @@ ipcMain.on("update", (event, data) => {
     class: 5,
     installment: 6,
     paidAmount: 7,
-    billNumber: 8,
+    billNo: 8,
   };
   workbook.xlsx.readFile(data.filePath).then(() => {
     var worksheet = workbook.getWorksheet("Fee");
     var row = worksheet.getRow(data.rowNumber);
-    row.getCell(columns.firstName).value = data.firstName;
-    row.getCell(columns.middleName).value = data.middleName;
-    row.getCell(columns.lastName).value = data.lastName;
+    row.getCell(columns.firstName).value = data.firstName.trim();
+    row.getCell(columns.middleName).value = data.middleName.trim();
+    row.getCell(columns.lastName).value = data.lastName.trim();
     row.getCell(columns.mobileNumber).value = data.mobileNumber;
     row.getCell(columns.class).value = data.class;
     row.getCell(columns.installment).value = data.installment;
     row.getCell(columns.paidAmount).value = data.paidAmount;
-    row.getCell(columns.billNumber).value = data.billNumber;
+    row.getCell(columns.billNo).value = data.billNo;
 
     row.commit();
     workbook.xlsx.writeFile(data.filePath);
+    showDialog("Success", "Data Updated");
   });
 });
 ipcMain.on("delete", (event, data) => {
@@ -108,7 +124,7 @@ ipcMain.on("delete", (event, data) => {
       class: 5,
       installment: 6,
       paidAmount: 7,
-      billNumber: 8,
+      billNo: 8,
     };
     var worksheet = workbook.getWorksheet("Fee");
     var row = worksheet.getRow(data.rowNumber);
@@ -119,7 +135,7 @@ ipcMain.on("delete", (event, data) => {
     row.getCell(columns.class).value = "";
     row.getCell(columns.installment).value = "";
     row.getCell(columns.paidAmount).value = "";
-    row.getCell(columns.billNumber).value = "";
+    row.getCell(columns.billNo).value = "";
     row.commit();
 
     if (data.rowNumber == worksheet.rowCount) {
@@ -127,6 +143,7 @@ ipcMain.on("delete", (event, data) => {
       worksheet.spliceRows(data.rowNumber, 1);
     }
     workbook.xlsx.writeFile(data.filePath);
+    showDialog("Success", "Data Deleted");
   });
 });
 
@@ -143,21 +160,22 @@ ipcMain.on("insert", (event, data) => {
       { header: "Class", key: "class", width: 10 },
       { header: "Installment", key: "installment", width: 10 },
       { header: "Paid Amount", key: "paidAmount", width: 10 },
-      { header: "Bill Number", key: "billNumber", width: 10 },
+      { header: "Bill Number", key: "billNo", width: 10 },
     ];
 
     worksheet.addRow({
-      firstName: data.firstName,
-      middleName: data.middleName,
-      lastName: data.lastName,
+      firstName: data.firstName.trim(),
+      middleName: data.middleName.trim(),
+      lastName: data.lastName.trim(),
       mobileNumber: data.mobileNumber,
       class: data.class,
       installment: data.installment,
       paidAmount: data.paidAmount,
-      billNumber: data.billNo,
+      billNo: data.billNo,
     });
 
     workbook.xlsx.writeFile(data.filePath);
+    showDialog("Success", "Data Inserted");
   });
 });
 

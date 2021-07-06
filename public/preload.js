@@ -26,9 +26,9 @@ contextBridge.exposeInMainWorld("api", {
   getData: () => {
     var filePath = sessionStorage.getItem("filePath");
     var formData = {
-      firstName: document.getElementById("firstName").value,
-      middleName: document.getElementById("middleName").value,
-      lastName: document.getElementById("lastName").value,
+      firstName: document.getElementById("firstName").value.trim(),
+      middleName: document.getElementById("middleName").value.trim(),
+      lastName: document.getElementById("lastName").value.trim(),
       installment: document.getElementById("installment").value,
       filePath: filePath,
     };
@@ -37,13 +37,12 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.on("studentData", (_, data) => {
       if (data) {
         studentData = data;
-        studentData["filePath"] = filePath
+        studentData["filePath"] = filePath;
         document.getElementById("mobileNumber").value = data.mobileNumber;
         document.getElementById("class").value = data.class;
         document.getElementById("paidAmount").value = data.paidAmount;
-        document.getElementById("billNo").value = data.billNumber;
+        document.getElementById("billNo").value = data.billNo;
       } else {
-        // SHOW DIALOG as -> Data Not Found
         console.log("SHOW DIALOG as -> Data Not Found");
       }
     });
