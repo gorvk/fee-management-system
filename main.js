@@ -3,21 +3,30 @@ const url = require("url");
 const path = require("path");
 const { app, BrowserWindow, ipcMain, dialog } = electron;
 const XLSX = require("exceljs");
+const fs = require("fs");
 
 let mainWindow;
+let fp;
 
 function initializeWorkbook(filePath) {
-  var workbook = new XLSX.Workbook();
-  workbook.xlsx.readFile(filePath).then(() => {
-    if (workbook.getWorksheet("Fee") == undefined) {
-      workbook.addWorksheet("Fee");
+  let workbook = new XLSX.Workbook();
+
+  workbook.xlsx
+    .readFile(filePath)
+    .then((wb) => {
+      var worksheet = wb.getWorksheet("Fee");
+      if (worksheet == undefined) {
+        wb.addWorksheet("Fee");
+        wb.xlsx.writeFile(filePath); // TypeError: Cannot read property 'date1904' of undefined
+      } else {
+        console.log("WORKSHEET Exists !!");
+      }
+    })
+    .catch((err) => {
+      console.log("Before Add Sheet 2");
+      worksheet = workbook.addWorksheet("Fee");
       workbook.xlsx.writeFile(filePath);
-      showDialog("Success", "Worksheet Created");
-      console.log("Worksheet Intialized !!");
-    } else {
-      console.log("WORKSHEET Exists !!");
-    }
-  });
+    });
 }
 
 function showDialog(title, message) {
@@ -39,14 +48,16 @@ ipcMain.on("getFilePath", (event, data) => {
       ],
       properties: ["openFile"],
     })
-    .then((file) => {
+    .then(async (file) => {
+      fp = file.filePaths[0];
       console.log(file.canceled);
       if (!file.canceled) {
-        initializeWorkbook(file.filePaths[0]);
-        event.reply("filePath", file.filePaths[0]);
+        initializeWorkbook(fp);
+        event.reply("filePath", fp);
       }
     })
     .catch((err) => {
+      console.log("yo2");
       console.log(err);
     });
 });
@@ -65,7 +76,7 @@ ipcMain.on("getData", (event, data) => {
         row.values.includes(data.middleName) &&
         row.values.includes(data.installment)
       ) {
-        console.log("date main ="+row.values[9]);
+        console.log("date main =" + row.values[9]);
         found = {
           mobileNumber: row.values[4],
           class: row.values[5],
@@ -80,7 +91,6 @@ ipcMain.on("getData", (event, data) => {
     if (found == false) {
       showDialog("Failed", "Data not Found");
     }
-
     event.reply("studentData", found);
   });
 });
@@ -155,36 +165,55 @@ ipcMain.on("delete", (event, data) => {
 
 ipcMain.on("insert", (event, data) => {
   var workbook = new XLSX.Workbook();
-  workbook.xlsx.readFile(data.filePath).then(() => {
-    var worksheet = workbook.getWorksheet("Fee");
 
-    worksheet.columns = [
-      { header: "First Name", key: "firstName", width: 10 },
-      { header: "Middle Name", key: "middleName", width: 10 },
-      { header: "Last Name", key: "lastName", width: 10 },
-      { header: "Mobile Number", key: "mobileNumber", width: 10 },
-      { header: "Class", key: "class", width: 10 },
-      { header: "Installment", key: "installment", width: 10 },
-      { header: "Paid Amount", key: "paidAmount", width: 10 },
-      { header: "Bill Number", key: "billNo", width: 10 },
-      { header: "Date", key: "date", width: 10 },
-    ];
+  workbook.xlsx
+    .readFile(data.filePath)
+    .then(() => {
+      var worksheet = workbook.getWorksheet("Fee");
 
-    worksheet.addRow({
-      firstName: data.firstName.trim(),
-      middleName: data.middleName.trim(),
-      lastName: data.lastName.trim(),
-      mobileNumber: data.mobileNumber,
-      class: data.class,
-      installment: data.installment,
-      paidAmount: data.paidAmount,
-      billNo: data.billNo,
-      date: data.date,
+      worksheet.columns = [
+        { header: "First Name", key: "firstName", width: 10 },
+        { header: "Middle Name", key: "middleName", width: 10 },
+        { header: "Last Name", key: "lastName", width: 10 },
+        { header: "Mobile Number", key: "mobileNumber", width: 10 },
+        { header: "Class", key: "class", width: 10 },
+        { header: "Installment", key: "installment", width: 10 },
+        { header: "Paid Amount", key: "paidAmount", width: 10 },
+        { header: "Bill Number", key: "billNo", width: 10 },
+        { header: "Date", key: "date", width: 10 },
+      ];
+
+      worksheet.addRow({
+        firstName: data.firstName.trim(),
+        middleName: data.middleName.trim(),
+        lastName: data.lastName.trim(),
+        mobileNumber: data.mobileNumber,
+        class: data.class,
+        installment: data.installment,
+        paidAmount: data.paidAmount,
+        billNo: data.billNo,
+        date: data.date,
+      });
+      workbook.xlsx.writeFile(data.filePath);
+      showDialog("Success", "Data Inserted");
+    })
+    .catch((err) => {
+      let flag = 1;
+      dialog
+        .showMessageBox(null, {
+          message: "An Error Occured please select the file again.",
+          title: "Error",
+          buttons: ["OK"],
+          defaultId: 1,
+        })
+        .then((result) => {
+          if (result.response === 0) {
+            flag = result.response;
+            console.log("Responsed");
+          }
+        });
+      event.reply("fileError");
     });
-
-    workbook.xlsx.writeFile(data.filePath);
-    showDialog("Success", "Data Inserted");
-  });
 });
 
 app.on("ready", () => {

@@ -21,6 +21,10 @@ contextBridge.exposeInMainWorld("api", {
     var fdata = {};
     formData.forEach((value, key) => (fdata[key] = value));
     ipcRenderer.send("insert", fdata);
+    
+    ipcRenderer.on("fileError", (_, data) => {
+      window.location.href = "../index.html";
+    });
   },
 
   getData: () => {
