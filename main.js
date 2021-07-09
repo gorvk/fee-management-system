@@ -74,7 +74,7 @@ ipcMain.on("getData", (event, data) => {
         row.values.includes(data.firstName) &&
         row.values.includes(data.lastName) &&
         row.values.includes(data.middleName) &&
-        row.values.includes(data.installment)
+        row.values.includes(data.feeType)
       ) {
         console.log("date main =" + row.values[9]);
         found = {
@@ -103,7 +103,7 @@ ipcMain.on("update", (event, data) => {
     lastName: 3,
     mobileNumber: 4,
     class: 5,
-    installment: 6,
+    feeType: 6,
     paidAmount: 7,
     billNo: 8,
     date: 9,
@@ -116,7 +116,7 @@ ipcMain.on("update", (event, data) => {
     row.getCell(columns.lastName).value = data.lastName.trim();
     row.getCell(columns.mobileNumber).value = data.mobileNumber;
     row.getCell(columns.class).value = data.class;
-    row.getCell(columns.installment).value = data.installment;
+    row.getCell(columns.feeType).value = data.feeType;
     row.getCell(columns.paidAmount).value = data.paidAmount;
     row.getCell(columns.billNo).value = data.billNo;
     row.getCell(columns.date).value = data.date;
@@ -136,7 +136,7 @@ ipcMain.on("delete", (event, data) => {
       lastName: 3,
       mobileNumber: 4,
       class: 5,
-      installment: 6,
+      feeType: 6,
       paidAmount: 7,
       billNo: 8,
       date: 9,
@@ -148,7 +148,7 @@ ipcMain.on("delete", (event, data) => {
     row.getCell(columns.lastName).value = "";
     row.getCell(columns.mobileNumber).value = "";
     row.getCell(columns.class).value = "";
-    row.getCell(columns.installment).value = "";
+    row.getCell(columns.feeType).value = "";
     row.getCell(columns.paidAmount).value = "";
     row.getCell(columns.billNo).value = "";
     row.getCell(columns.date).value = "";
@@ -177,7 +177,7 @@ ipcMain.on("insert", (event, data) => {
         { header: "Last Name", key: "lastName", width: 10 },
         { header: "Mobile Number", key: "mobileNumber", width: 10 },
         { header: "Class", key: "class", width: 10 },
-        { header: "Installment", key: "installment", width: 10 },
+        { header: "Fee Type", key: "feeType", width: 10 },
         { header: "Paid Amount", key: "paidAmount", width: 10 },
         { header: "Bill Number", key: "billNo", width: 10 },
         { header: "Date", key: "date", width: 10 },
@@ -189,7 +189,7 @@ ipcMain.on("insert", (event, data) => {
         lastName: data.lastName.trim(),
         mobileNumber: data.mobileNumber,
         class: data.class,
-        installment: data.installment,
+        feeType: data.feeType,
         paidAmount: data.paidAmount,
         billNo: data.billNo,
         date: data.date,
@@ -224,9 +224,12 @@ app.on("ready", () => {
       enableRemoteModule: true,
       preload: path.join(__dirname, "./public/preload.js"),
     },
+    icon: "./public/styles/ic_launcher.jpg",
   });
   mainWindow.loadURL(
     url.format(path.join(__dirname, "public/index.html"), "file:", true)
   );
   mainWindow.maximize(true);
+  mainWindow.removeMenu()
+  
 });

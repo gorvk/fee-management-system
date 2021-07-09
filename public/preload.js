@@ -33,7 +33,7 @@ contextBridge.exposeInMainWorld("api", {
       firstName: document.getElementById("firstName").value.trim(),
       middleName: document.getElementById("middleName").value.trim(),
       lastName: document.getElementById("lastName").value.trim(),
-      installment: document.getElementById("installment").value,
+      feeType: document.getElementById("feeType").value,
       filePath: filePath,
     };
 

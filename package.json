@@ -1,17 +1,33 @@
 {
   "name": "fee-management-system",
   "version": "1.0.0",
-  "description": "",
+  "description": "Developed for Sanjo Public School, Sulezari by Gourav Kolhatkar",
   "main": "main.js",
   "scripts": {
-    "watch": "nodemon --exec electron ."
+    "watch": "nodemon --exec electron .",
+    "dist": "electron-builder --ia32 --x64 -w"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Gourav Kolhatkar",
+  "license": "MIT",
   "dependencies": {
     "bootstrap": "^5.0.2",
-    "electron": "^13.1.4",
     "exceljs": "^4.2.1"
+  },
+  "devDependencies": {
+    "electron": "^13.1.6",
+    "electron-builder": "^22.11.7"
+  },
+  "build": {
+    "appId": "com.fee-management-system.app",
+    "productName": "Fee Management System - Sanjo Public School, Sulezari",
+    "target": "NSIS",
+    "win" : {
+      "icon" : "./public/styles/ic_launcher.png"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
   }
 }
