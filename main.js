@@ -1,13 +1,34 @@
-const electron = require("electron");
-const url = require("url");
+//Importing Modules/Packages/Libraries
+const electron = require("electron"); //Importing the electorn as electron
+const url = require("url"); //Importing url and path module for working with paths of files.
 const path = require("path");
-const { app, BrowserWindow, ipcMain, dialog } = electron;
-const XLSX = require("exceljs");
-const fs = require("fs");
+const { app, BrowserWindow, ipcMain, dialog } = electron; //Importing classes and objects from electron.
+const XLSX = require("exceljs"); //Importing ExcelJS for working with Excel Files.
 
 let mainWindow;
 let fp;
 
+//Starting function of App.
+app.on("ready", () => {
+  // Declaring the App window.
+  mainWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: true,
+      preload: path.join(__dirname, "./public/preload.js"), //Passing the Preloading JS File to do intial tasks.
+    },
+    icon: "./public/styles/ic_launcher.jpg", //Defining the icon of window.
+  });
+  // Loading the first screen of App.
+  mainWindow.loadURL(
+    url.format(path.join(__dirname, "public/index.html"), "file:", true)
+  );
+  mainWindow.maximize(true);
+  mainWindow.removeMenu();
+});
+
+//Intializing the Workbook Excel File and Adding the new Worksheet named as Fee.
 function initializeWorkbook(filePath) {
   let workbook = new XLSX.Workbook();
 
@@ -17,7 +38,7 @@ function initializeWorkbook(filePath) {
       var worksheet = wb.getWorksheet("Fee");
       if (worksheet == undefined) {
         wb.addWorksheet("Fee");
-        wb.xlsx.writeFile(filePath); // TypeError: Cannot read property 'date1904' of undefined
+        wb.xlsx.writeFile(filePath);
       } else {
         console.log("WORKSHEET Exists !!");
       }
@@ -29,6 +50,7 @@ function initializeWorkbook(filePath) {
     });
 }
 
+// Function to show Custom Dialog Box with message.
 function showDialog(title, message) {
   var options = {
     message: message,
@@ -37,6 +59,7 @@ function showDialog(title, message) {
   dialog.showMessageBox(null, options);
 }
 
+// Funtion to select File from File Explorer.
 ipcMain.on("getFilePath", (event, data) => {
   dialog
     .showOpenDialog({
@@ -57,19 +80,17 @@ ipcMain.on("getFilePath", (event, data) => {
       }
     })
     .catch((err) => {
-      console.log("yo2");
       console.log(err);
     });
 });
 
+// Funtion to READ data from Excel File.
 ipcMain.on("getData", (event, data) => {
-  // READ
   var found = false;
   var workbook = new XLSX.Workbook();
   workbook.xlsx.readFile(data.filePath).then(() => {
     var worksheet = workbook.getWorksheet("Fee");
     worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
-      // console.log(row.values);
       if (
         row.values.includes(data.firstName) &&
         row.values.includes(data.lastName) &&
@@ -95,6 +116,7 @@ ipcMain.on("getData", (event, data) => {
   });
 });
 
+// Function to UPDATE the Excel File Data.
 ipcMain.on("update", (event, data) => {
   var workbook = new XLSX.Workbook();
   var columns = {
@@ -126,6 +148,8 @@ ipcMain.on("update", (event, data) => {
     showDialog("Success", "Data Updated");
   });
 });
+
+// Function to DELETE the Excel file data.
 ipcMain.on("delete", (event, data) => {
   var workbook = new XLSX.Workbook();
 
@@ -163,6 +187,7 @@ ipcMain.on("delete", (event, data) => {
   });
 });
 
+// Function to INSERT the data in Excel file.
 ipcMain.on("insert", (event, data) => {
   var workbook = new XLSX.Workbook();
 
@@ -214,22 +239,4 @@ ipcMain.on("insert", (event, data) => {
         });
       event.reply("fileError");
     });
-});
-
-app.on("ready", () => {
-  mainWindow = new BrowserWindow({
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      enableRemoteModule: true,
-      preload: path.join(__dirname, "./public/preload.js"),
-    },
-    icon: "./public/styles/ic_launcher.jpg",
-  });
-  mainWindow.loadURL(
-    url.format(path.join(__dirname, "public/index.html"), "file:", true)
-  );
-  mainWindow.maximize(true);
-  mainWindow.removeMenu()
-  
 });

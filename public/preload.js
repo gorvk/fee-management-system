@@ -1,8 +1,10 @@
-const { contextBridge } = require("electron");
-const { ipcRenderer } = require("electron");
+// Preload Script. 
 
+//Importing the ContextBridge for sharing the context data and IPCRenderer for sending and recieving data.
+const { contextBridge, ipcRenderer } = require("electron"); 
 var studentData;
 
+// Function to perform Crud Operation on Excel File.
 contextBridge.exposeInMainWorld("api", {
   getFilePath: () => {
     ipcRenderer.send("getFilePath");
